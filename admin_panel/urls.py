@@ -7,4 +7,5 @@ urlpatterns = [
     path('api/product_details/<str:product_name>/', views.get_product_details_by_name, name='product_details'),
     path('api/merchants/', views.get_merchant_list, name='merchant_list'),
      path('api/product_names/', views.get_product_name_list, name='product_name_list'),
+     path('api/products_with_ratings/', views.get_all_products_with_ratings, name='products_with_ratings'),
 ]
