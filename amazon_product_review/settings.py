@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 import dotenv
 
@@ -128,3 +129,11 @@ STATIC_URL = 'static/'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STATIC_URL = '/static/'
+
+
+# Directory where static files will be collected
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # Path to your static files
+]
