@@ -9,6 +9,16 @@ class Product(models.Model):
     summary = models.TextField()
     merchant = models.CharField(max_length=255)
     suggestion = models.TextField()
+    def __str__(self):
+        return self.name
+    
+class AllProduct(models.Model):
+    asin = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=255)
+    rating = models.FloatField()
+    review = models.TextField()
+    class Meta:
+        db_table = 'AllProducts'  # Ensure this matches your migration file if you've defined it
 
     def __str__(self):
         return self.name

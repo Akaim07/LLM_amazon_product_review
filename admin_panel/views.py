@@ -1,13 +1,11 @@
 from django.shortcuts import render
-
-# Create your views here.
-
-# Create your views here.
+from collections import defaultdict
+from django.db.models import Count, Case, When, IntegerField
 from django.shortcuts import render
 from django.http import JsonResponse  # If you want to return a JSON response
 from .gemini import GeminiGenerator  # Import the GeminiGenerator class
 from django.shortcuts import get_list_or_404,get_object_or_404
-from .models import Product
+from .models import Product,AllProduct
 
 
 # Define the view for getting a suggestion
@@ -32,6 +30,16 @@ def get_products_by_merchant(request, merchant_name):
 
     return JsonResponse({'products': product_list})
 
+
+def product_rating_stats(request):
+    # Group by name and annotate with the count of ratings based on the condition
+    product_stats = AllProduct.objects.values('name').annotate(
+        positive=Count(Case(When(rating__gt=4, then=1), output_field=IntegerField())),
+        negative=Count(Case(When(rating__lt=4, then=1), output_field=IntegerField())),
+        neutral=Count(Case(When(rating=4, then=1), output_field=IntegerField()))
+    )    
+    response_data = list(product_stats)
+    return JsonResponse(response_data, safe=False)
 
 def get_product_details_by_name(request, product_name):
     # Fetch product by name
@@ -65,5 +73,30 @@ def get_all_products_with_ratings(request):
     products = Product.objects.values('id','name', 'overall_rating')
     return JsonResponse({'products': list(products)})
 
+def get_merchants_with_product_info(request):
+    merchants_data = defaultdict(lambda: {'count': 0, 'products': []})
+    products = Product.objects.all()
+
+    for product in products:
+        merchants_data[product.merchant]['count'] += 1
+        # Append both product id and name to the products list
+        merchants_data[product.merchant]['products'].append({
+            'id': product.id,
+            'name': product.name
+        })
+
+    response_data = []
+    for merchant, info in merchants_data.items():
+        response_data.append({
+            'merchant': merchant,
+            'product_count': info['count'],
+            'products': info['products']
+        })
+
+    return JsonResponse({'merchants': response_data})
+
+
 def admin_pannel(request):
     return render(request, 'admin_page.html')
+
+
