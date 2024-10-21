@@ -39,6 +39,7 @@ def get_product_details_by_name(request, product_name):
 
     # Prepare response data
     product_details = {
+        'id' : product.id,
         'name': product.name,
         'rating': product.overall_rating,
         'summary': product.summary,
@@ -53,12 +54,15 @@ def get_merchant_list(request):
 
 def get_product_name_list(request):
     # Fetch all product names
-    product_names = Product.objects.values_list('name', flat=True)
-    return JsonResponse({'product_names': list(product_names)})
+    products = Product.objects.values() 
+    product_list = list(products)
+    
+    # product_names = Product.objects.values_list('id','name')
+    return JsonResponse({'product_names':product_list})
 
 def get_all_products_with_ratings(request):
     # Fetch all products with their names and ratings
-    products = Product.objects.values('name', 'overall_rating')
+    products = Product.objects.values('id','name', 'overall_rating')
     return JsonResponse({'products': list(products)})
 
 def admin_pannel(request):
