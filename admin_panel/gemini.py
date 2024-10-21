@@ -46,12 +46,10 @@ class GeminiGenerator:
             people = product_details['review_count']
             summary = product_details['summary']
             
-            prompt = f"""Product ID: {product_id},
+            prompt = f"""
                     Name: {name},
-                    Average Ratings: {rating},
                     Review : {summary}
-                    Merchant: {product_details['merchant']}
-                    JJust give a suggestion based on review for this product,I need recommandation from you to improve product up to 50 words. don't self reference yourself, give in json format."""
+                    Give a suggestion for sales analyst based on review for this product,I need recommandation from you to improve product up to 150 words. don't self reference yourself, don't include * or newline or don't give in point, give in json format. like suggestion : """
             print(prompt)
             return GeminiGenerator.ask_gemini(prompt)
         return "Product Not Valid"

@@ -20,5 +20,5 @@ from admin_panel import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('admin_panel.urls')),
+    path('admin_panel/', include('admin_panel.urls')),
 ]
