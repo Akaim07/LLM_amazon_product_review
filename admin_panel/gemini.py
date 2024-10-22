@@ -33,7 +33,7 @@ class GeminiGenerator:
     @classmethod
     def ask_gemini(cls, prompt): 
         response = cls.chat.send_message(prompt)
-        print(response.text)
+        # print(response.text)
         return json.loads(response.text)
     
     @classmethod
@@ -50,7 +50,7 @@ class GeminiGenerator:
                     Name: {name},
                     Review : {summary}
                     Give a suggestion for sales analyst based on review for this product,I need recommandation from you to improve product up to 150 words. don't self reference yourself, don't include * or newline or don't give in point, give in json format. like suggestion : """
-            print(prompt)
+            # print(prompt)
             return GeminiGenerator.ask_gemini(prompt)
         return "Product Not Valid"
     
@@ -76,5 +76,5 @@ class GeminiGenerator:
         else:
             return None  # If no product was found
     
-if __name__=='__main__':
-    print(GeminiGenerator.get_suggestion(product="Mamaearth-Onion-Growth-Control-Redensyl"))
+# if __name__=='__main__':
+#     print(GeminiGenerator.get_suggestion(product="Mamaearth-Onion-Growth-Control-Redensyl"))
